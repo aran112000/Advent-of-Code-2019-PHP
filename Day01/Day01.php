@@ -1,17 +1,34 @@
 <?php
 
+require('../src/AdventOfCode.php');
+
 /**
  * Class Day01
  */
-class Day01
+class Day01 extends AdventOfCode
 {
 
+    protected array $partOneTests = [
+        12 => 2,
+        14 => 2,
+        1969 => 654,
+        100756 => 33583,
+    ];
+
+    protected array $partTwoTests = [
+        14 => 2,
+        1969 => 966,
+        100756 => 50346,
+    ];
+
     /**
+     * @param int[] $input
+     *
      * @return int
      */
-    public function getPartOne(): int
+    public function getPartOne(array $input): int
     {
-        foreach ($this->getInput() as $mass) {
+        foreach ($input as $mass) {
             $result[] = $this->getFuel($mass);
         }
 
@@ -19,11 +36,13 @@ class Day01
     }
 
     /**
+     * @param int[] $input
+     *
      * @return int
      */
-    public function getPartTwo(): int
+    public function getPartTwo(array $input): int
     {
-        foreach ($this->getInput() as $mass) {
+        foreach ($input as $mass) {
             $result[] = $fuel = $this->getFuel($mass);
 
             while ($fuel = $this->getFuel($fuel)) {
@@ -43,17 +62,6 @@ class Day01
     {
         return max(floor($mass / 3) - 2, 0);
     }
-
-    /**
-     * @return int[]
-     */
-    private function getInput(): array
-    {
-        return explode("\n", file_get_contents('input.txt'));
-    }
 }
 
-$task = new Day01();
-
-echo 'Part one: ' . $task->getPartOne() . PHP_EOL;
-echo 'Part two: ' . $task->getPartTwo();
+(new Day01)->init();
