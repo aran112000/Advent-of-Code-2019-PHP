@@ -14,17 +14,19 @@ abstract class AdventOfCode extends Test
     {
         $this->initTests();
 
-        $input = $this->getInput();
+        $input = $this->getInput(static::INPUT_DELIMITER);
 
-        echo 'Part one: ' . $this->getPerf('getPartOne', [$input]) . PHP_EOL;
-        echo 'Part two: ' . $this->getPerf('getPartTwo', [$input]);
+        echo 'Part one: ' . $this->getPerf('getPartOne', [$input, false]) . PHP_EOL;
+        echo 'Part two: ' . $this->getPerf('getPartTwo', [$input, false]);
     }
 
     /**
-     * @return int[]
+     * @param string $delimiter
+     *
+     * @return array
      */
-    private function getInput(): array
+    private function getInput($delimiter = "\n"): array
     {
-        return explode("\n", file_get_contents('input.txt'));
+        return explode($delimiter, file_get_contents('input.txt'));
     }
 }
