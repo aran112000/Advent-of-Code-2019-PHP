@@ -16,6 +16,6 @@ trait Performance
         $response = $this->$functionToCall(...$parameters);
         $runTime = microtime(true) - $startTime;
 
-        return '`' . $response . '`' . ' (Completed in ' . round($runTime, 4) . 's)';
+        return '`' . $response . '`' . ' (Completed in ' . number_format($runTime, 5) . 's)';
     }
 }
