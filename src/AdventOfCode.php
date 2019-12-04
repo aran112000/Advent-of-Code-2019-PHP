@@ -8,6 +8,20 @@ abstract class AdventOfCode extends Test
     use Performance;
 
     /**
+     * @param array $input
+     *
+     * @return mixed
+     */
+    abstract function getPartOne(array $input);
+
+    /**
+     * @param array $input
+     *
+     * @return mixed
+     */
+    abstract function getPartTwo(array $input);
+
+    /**
      *
      */
     public function init()
