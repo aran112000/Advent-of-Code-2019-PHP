@@ -1,6 +1,8 @@
 <?php
 
-require('../src/AdventOfCode.php');
+namespace AdventOfCode\Day17;
+
+use AdventOfCode\AdventOfCode;
 
 /**
  * Class Day17
@@ -32,5 +34,3 @@ class Day17 extends AdventOfCode
         // TODO
     }
 }
-
-(new Day17)->init();

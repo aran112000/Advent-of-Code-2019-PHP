@@ -66,7 +66,11 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7' => '410',
 
                     $currentCoordinate = $this->currentPosition['X'] . ',' . $this->currentPosition['Y'];
 
-                    if (isset($grid[$currentCoordinate]) && !isset($wirePath[$currentCoordinate]) && $currentCoordinate !== '0,0') {
+                    if (
+                        isset($grid[$currentCoordinate])
+                        && !isset($wirePath[$currentCoordinate])
+                        && $currentCoordinate !== '0,0'
+                    ) {
                         // Track intersections with other wires but not when at the starting position (0,0)
                         $intersections[] = $currentCoordinate;
                     }
@@ -121,7 +125,11 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7' => '410',
 
                     $currentCoordinate = $this->currentPosition['X'] . ',' . $this->currentPosition['Y'];
 
-                    if (isset($grid[$currentCoordinate]) && !isset($wirePath[$currentCoordinate]) && $currentCoordinate !== '0,0') {
+                    if (
+                        isset($grid[$currentCoordinate])
+                        && !isset($wirePath[$currentCoordinate])
+                        && $currentCoordinate !== '0,0'
+                    ) {
                         $intersectionCoordinates[] = $currentCoordinate;
                     }
 
@@ -138,5 +146,3 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7' => '410',
         return min($intersectionSteps);
     }
 }
-
-(new Day03)->init();

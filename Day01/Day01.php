@@ -67,5 +67,3 @@ class Day01 extends AdventOfCode
         return max(floor($mass / 3) - 2, 0);
     }
 }
-
-(new Day01)->init();

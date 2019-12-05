@@ -28,7 +28,6 @@ class Day04 extends AdventOfCode
 
             // Check for 6 equal or ascending numbers
             if (preg_match('/^(?=\d{6}$)0*1*2*3*4*5*6*7*8*9*$/', $code)) {
-
                 // Check for the presence of 1 or more adjacent repeating digits
                 if (preg_match('/(\d)\1+/', $code)) {
                     $possiblePasswords[] = $code;
@@ -53,7 +52,6 @@ class Day04 extends AdventOfCode
 
             // Check for 6 equal or ascending numbers
             if (preg_match('/^(?=\d{6}$)0*1*2*3*4*5*6*7*8*9*$/', $code)) {
-
                 // Check for the presence of 1 or more adjacent repeating digits
                 $matches = [];
                 if (preg_match_all('/(\d)\1+/', $code, $matches)) {
@@ -71,5 +69,3 @@ class Day04 extends AdventOfCode
         return count($possiblePasswords);
     }
 }
-
-(new Day04)->init();

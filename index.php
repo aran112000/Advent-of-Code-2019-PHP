@@ -4,4 +4,12 @@ require('src/Performance.php');
 require('src/AdventOfCode.php');
 require('src/Autoloader.php');
 
-(new AdventOfCode\Day05\Day05())->init();
+$day = null; // Set to an integer to force a given day
+
+if ($day === null) {
+    $day = date('d');
+}
+$day = str_pad($day, 2, '0', STR_PAD_LEFT);
+
+$class = "AdventOfCode\Day$day\Day$day";
+(new $class())->init();

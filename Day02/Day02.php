@@ -81,5 +81,3 @@ class Day02 extends AdventOfCode
         return $input[0];
     }
 }
-
-(new Day02)->init();
