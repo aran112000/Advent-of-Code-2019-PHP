@@ -3,7 +3,9 @@
 
     <file>.</file>
 
-    <exclude-pattern>*/vendor/*$</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <rule ref="PSR12"/>
 
     <arg name="basepath" value="."/>
     <arg name="colors"/>
