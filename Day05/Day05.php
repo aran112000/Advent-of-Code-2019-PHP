@@ -1,5 +1,4 @@
 <?php
-
 require('../src/AdventOfCode.php');
 
 /**
@@ -8,28 +7,26 @@ require('../src/AdventOfCode.php');
 class Day05 extends AdventOfCode
 {
 
-    protected array $partOneTests = [
-        // TODO
-    ];
-
-    protected array $partTwoTests = [
-        // TODO
-    ];
+    const INPUT_DELIMITER = ',';
 
     /**
      * @param int[] $input
+     *
+     * @return int
      */
-    public function getPartOne(array $input)
+    public function getPartOne(array $input): int
     {
-        // TODO
+        return (new IntcodeComputer(1, $input))->calculate(1);
     }
 
     /**
      * @param int[] $input
+     *
+     * @return int
      */
-    public function getPartTwo(array $input)
+    public function getPartTwo(array $input): int
     {
-        // TODO
+        return (new IntcodeComputer(2, $input))->calculate(5);
     }
 }
 
