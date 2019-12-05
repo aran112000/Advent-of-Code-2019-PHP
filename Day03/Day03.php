@@ -66,13 +66,11 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7' => '410',
 
                     $currentCoordinate = $this->currentPosition['X'] . ',' . $this->currentPosition['Y'];
 
-                    if (
-                        isset($grid[$currentCoordinate])
-                        && !isset($wirePath[$currentCoordinate])
-                        && $currentCoordinate !== '0,0'
-                    ) {
-                        // Track intersections with other wires but not when at the starting position (0,0)
-                        $intersections[] = $currentCoordinate;
+                    if (isset($grid[$currentCoordinate]) && !isset($wirePath[$currentCoordinate])) {
+                        if ($currentCoordinate !== '0,0') {
+                            // Track intersections with other wires but not when at the starting position (0,0)
+                            $intersections[] = $currentCoordinate;
+                        }
                     }
 
                     $grid[$currentCoordinate] = $wirePath[$currentCoordinate] = 'X';
@@ -125,12 +123,10 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7' => '410',
 
                     $currentCoordinate = $this->currentPosition['X'] . ',' . $this->currentPosition['Y'];
 
-                    if (
-                        isset($grid[$currentCoordinate])
-                        && !isset($wirePath[$currentCoordinate])
-                        && $currentCoordinate !== '0,0'
-                    ) {
-                        $intersectionCoordinates[] = $currentCoordinate;
+                    if (isset($grid[$currentCoordinate]) && !isset($wirePath[$currentCoordinate])) {
+                        if ($currentCoordinate !== '0,0') {
+                            $intersectionCoordinates[] = $currentCoordinate;
+                        }
                     }
 
                     $grid[$currentCoordinate][$wireNumber] = $wirePath[$currentCoordinate][$wireNumber] = $wireSteps;
