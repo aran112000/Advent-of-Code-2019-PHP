@@ -36,8 +36,6 @@ class Day04 extends AdventOfCode
     }
 
     /**
-     * 365 = too low
-     *
      * @param int[] $input
      *
      * @return int
