@@ -1,6 +1,7 @@
 <?php
 
 require('../src/Test.php');
+require('../src/Autoloader.php');
 require('../src/Performance.php');
 
 abstract class AdventOfCode extends Test
