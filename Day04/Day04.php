@@ -1,14 +1,18 @@
 <?php
 
-require('../src/AdventOfCode.php');
+namespace AdventOfCode\Day04;
+
+use AdventOfCode\AdventOfCode;
 
 /**
  * Class Day04
+ *
+ * @package AdventOfCode\Day04
  */
 class Day04 extends AdventOfCode
 {
 
-    const INPUT_DELIMITER = '-';
+    protected const INPUT_DELIMITER = '-';
 
     /**
      * @param int[] $input

@@ -1,9 +1,13 @@
 <?php
 
-require('../src/AdventOfCode.php');
+namespace AdventOfCode\Day03;
+
+use AdventOfCode\AdventOfCode;
 
 /**
  * Class Day03
+ *
+ * @package AdventOfCode\Day03
  */
 class Day03 extends AdventOfCode
 {

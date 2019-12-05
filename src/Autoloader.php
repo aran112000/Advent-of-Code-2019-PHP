@@ -1,7 +1,8 @@
 <?php
 
 spl_autoload_register(function ($className) {
-    $filename = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
+    $filename = trim(str_replace('AdventOfCode', '', str_replace('\\', DIRECTORY_SEPARATOR, $className)), ' /\\');
+    $filename .= '.php';
     $basename = basename($filename);
 
     if (is_readable($filename)) {

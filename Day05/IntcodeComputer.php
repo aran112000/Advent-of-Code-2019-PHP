@@ -1,32 +1,37 @@
 <?php
+
+namespace AdventOfCode\Day05;
+
 /**
  * Class IntcodeComputer
+ *
+ * @package AdventOfCode
  */
 class IntcodeComputer
 {
 
-    const OPCODE_ADD = 1;
-    const OPCODE_MULTIPLY = 2;
-    const OPCODE_INPUT = 3;
-    const OPCODE_OUTPUT = 4;
-    const OPCODE_JUMP_IF_TRUE = 5;
-    const OPCODE_JUMP_IF_FALSE = 6;
-    const OPCODE_LESS_THEN = 7;
-    const OPCODE_EQUALS = 8;
-    const OPCODE_FINISHED = 99;
+    private const OPCODE_ADD = 1;
+    private const OPCODE_MULTIPLY = 2;
+    private const OPCODE_INPUT = 3;
+    private const OPCODE_OUTPUT = 4;
+    private const OPCODE_JUMP_IF_TRUE = 5;
+    private const OPCODE_JUMP_IF_FALSE = 6;
+    private const OPCODE_LESS_THAN = 7;
+    private const OPCODE_EQUALS = 8;
+    private const OPCODE_FINISHED = 99;
 
-    const OPCODE_PARAMETER_COUNT = [
+    private const OPCODE_PARAMETER_COUNT = [
         self::OPCODE_ADD => 4,
         self::OPCODE_MULTIPLY => 4,
         self::OPCODE_INPUT => 2,
         self::OPCODE_OUTPUT => 2,
         self::OPCODE_JUMP_IF_TRUE => 3,
         self::OPCODE_JUMP_IF_FALSE => 3,
-        self::OPCODE_LESS_THEN => 4,
+        self::OPCODE_LESS_THAN => 4,
         self::OPCODE_EQUALS => 4,
     ];
 
-    const PARAMETER_MODE_POSITION = 0;
+    private const PARAMETER_MODE_POSITION = 0;
 
     /**
      * @var int
@@ -65,7 +70,7 @@ class IntcodeComputer
 
             $instruction = [];
             for ($ii = 0; $ii < static::OPCODE_PARAMETER_COUNT[$opcode]; $ii++) {
-                $instruction[] = $this->instructions[$i+$ii];
+                $instruction[] = $this->instructions[$i + $ii];
             }
 
             $i += static::OPCODE_PARAMETER_COUNT[$opcode];
@@ -114,7 +119,7 @@ class IntcodeComputer
                     continue;
                 }
 
-                if ($opcode === static::OPCODE_LESS_THEN) {
+                if ($opcode === static::OPCODE_LESS_THAN) {
                     if ($this->getValue($instruction, 1) < $this->getValue($instruction, 2)) {
                         $this->setValue($instruction, 1);
                     } else {

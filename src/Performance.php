@@ -1,4 +1,12 @@
 <?php
+
+namespace AdventOfCode;
+
+/**
+ * Trait Performance
+ *
+ * @package AdventOfCode
+ */
 trait Performance
 {
 

@@ -1,14 +1,19 @@
 <?php
 
+namespace AdventOfCode;
+
 /**
  * Class Test
+ *
+ * @package AdventOfCode
  */
-abstract class Test {
+abstract class Test
+{
 
     protected array $partOneTests = [];
     protected array $partTwoTests = [];
 
-    const INPUT_DELIMITER = "\n";
+    protected const INPUT_DELIMITER = "\n";
 
     /**
      *
@@ -20,7 +25,7 @@ abstract class Test {
         try {
             echo 'Part one test results: ' . $this->runTest('One') . PHP_EOL;
             echo 'Part two test results: ' . $this->runTest('Two') . PHP_EOL . PHP_EOL;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             die($e->getMessage());
         }
     }
@@ -45,12 +50,14 @@ abstract class Test {
                     $input = implode(static::INPUT_DELIMITER, $input);
                 }
 
-                $errors[] = 'Input "' . $input . '" expected "' . $expectedOutput . '" but received "' . $actualOutput . '"';
+                $errors[] = 'Input: ' . $input . ', expected: ' . $expectedOutput . ', received: ' . $actualOutput;
             }
         }
 
         if ($errors) {
-            throw new Exception('Part ' . strtolower($part) . ' failed with errors:' . PHP_EOL . ' - ' . implode(PHP_EOL . ' - ', $errors));
+            $error = implode(PHP_EOL . ' - ', $errors);
+
+            throw new \Exception('Part ' . strtolower($part) . ' failed with errors:' . PHP_EOL . ' - ' . $error);
         }
 
         $tests = count($this->{'part' . $part . 'Tests'});

@@ -1,5 +1,8 @@
 <?php
-require('../src/AdventOfCode.php');
+
+namespace AdventOfCode\Day05;
+
+use AdventOfCode\AdventOfCode;
 
 /**
  * Class Day05
@@ -7,7 +10,7 @@ require('../src/AdventOfCode.php');
 class Day05 extends AdventOfCode
 {
 
-    const INPUT_DELIMITER = ',';
+    protected const INPUT_DELIMITER = ',';
 
     /**
      * @param int[] $input
@@ -29,5 +32,3 @@ class Day05 extends AdventOfCode
         return (new IntcodeComputer(2, $input))->calculate(5);
     }
 }
-
-(new Day05)->init();

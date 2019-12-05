@@ -1,9 +1,12 @@
 <?php
 
-require('../src/Test.php');
-require('../src/Autoloader.php');
-require('../src/Performance.php');
+namespace AdventOfCode;
 
+/**
+ * Class AdventOfCode
+ *
+ * @package AdventOfCode
+ */
 abstract class AdventOfCode extends Test
 {
     use Performance;
@@ -13,14 +16,14 @@ abstract class AdventOfCode extends Test
      *
      * @return mixed
      */
-    abstract function getPartOne(array $input);
+    abstract public function getPartOne(array $input);
 
     /**
      * @param array $input
      *
      * @return mixed
      */
-    abstract function getPartTwo(array $input);
+    abstract public function getPartTwo(array $input);
 
     /**
      *
@@ -39,9 +42,15 @@ abstract class AdventOfCode extends Test
      * @param string $delimiter
      *
      * @return array
+     * @throws \Exception
      */
     private function getInput($delimiter = "\n"): array
     {
-        return explode($delimiter, file_get_contents('input.txt'));
+        $matches = [];
+        if (preg_match('/Day(\d+)/', get_called_class(), $matches)) {
+            return explode($delimiter, file_get_contents($matches[0] . DIRECTORY_SEPARATOR . 'input.txt'));
+        }
+
+        throw new \Exception('Unable to discover the current Day');
     }
 }

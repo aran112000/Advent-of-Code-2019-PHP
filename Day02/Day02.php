@@ -1,14 +1,18 @@
 <?php
 
-require('../src/AdventOfCode.php');
+namespace AdventOfCode\Day02;
+
+use AdventOfCode\AdventOfCode;
 
 /**
  * Class Day02
+ *
+ * @package AdventOfCode\Day02
  */
 class Day02 extends AdventOfCode
 {
 
-    const INPUT_DELIMITER = ',';
+    protected const INPUT_DELIMITER = ',';
 
     protected array $partOneTests = [
         '1,0,0,0,99' => '2',
