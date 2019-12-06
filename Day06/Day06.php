@@ -25,7 +25,19 @@ K)L' => 42,
     ];
 
     protected array $partTwoTests = [
-        // TODO
+        'COM)B
+B)C
+C)D
+D)E
+E)F
+B)G
+G)H
+D)I
+E)J
+J)K
+K)L
+K)YOU
+I)SAN' => 4,
     ];
 
     /**
@@ -42,10 +54,75 @@ K)L' => 42,
 
     /**
      * @param string[] $nodes
+     *
+     * @return int
      */
-    public function getPartTwo(array $nodes)
+    public function getPartTwo(array $nodes): int
     {
-        // TODO
+        $orbits = $this->getOrbits($nodes);
+
+        $pathToYou = $this->getPathToOrbit('YOU', $orbits);
+        $pathToSan = $this->getPathToOrbit('SAN', $orbits);
+
+        return $this->getTransfersBetweenPaths($pathToYou, $pathToSan);
+    }
+
+    /**
+     * Calculate the number of transfers BETWEEN two provided paths
+     *
+     * @param array $pathA
+     * @param array $pathB
+     *
+     * @return int
+     */
+    protected function getTransfersBetweenPaths(array $pathA, array $pathB): int
+    {
+        $stepsBetween = 0;
+        for ($i = 0, $max = max(count($pathA), count($pathB)); $i < $max; $i++) {
+            if (isset($pathA[$i], $pathB[$i])) {
+                if ($pathA[$i] !== $pathB[$i]) {
+                    $stepsBetween += 2;
+                }
+
+                continue;
+            }
+
+            $stepsBetween++;
+        }
+
+        return $stepsBetween;
+    }
+
+    /**
+     * Returns the path from COM to a specified orbit, or an empty array if not found
+     *
+     * @param string $searchingFor
+     * @param array  $orbits
+     * @param array  $currentPath
+     *
+     * @return array
+     */
+    protected function getPathToOrbit(string $searchingFor, array $orbits, array &$currentPath = []): array
+    {
+        foreach ($orbits as $orbit => $children) {
+            $pathBefore = $currentPath;
+
+            if ($orbit === $searchingFor) {
+                return $currentPath;
+            }
+
+            $currentPath[] = $orbit;
+
+            if (is_array($children)) {
+                if ($result = $this->getPathToOrbit($searchingFor, $children, $currentPath)) {
+                    return $currentPath;
+                }
+            }
+
+            $currentPath = $pathBefore;
+        }
+
+        return [];
     }
 
     /**
