@@ -20,11 +20,17 @@ abstract class Test
      */
     protected function initTests()
     {
-        echo 'Running tests...' . PHP_EOL;
+        if ($this->partOneTests || $this->partTwoTests) {
+            echo 'Running tests...' . PHP_EOL;
+        }
 
         try {
-            echo 'Part one test results: ' . $this->runTest('One') . PHP_EOL;
-            echo 'Part two test results: ' . $this->runTest('Two') . PHP_EOL . PHP_EOL;
+            if ($this->partOneTests) {
+                echo 'Part one test results: ' . $this->runTest('One') . PHP_EOL;
+            }
+            if ($this->partTwoTests) {
+                echo 'Part two test results: ' . $this->runTest('Two') . PHP_EOL . PHP_EOL;
+            }
         } catch (\Exception $e) {
             die($e->getMessage());
         }
