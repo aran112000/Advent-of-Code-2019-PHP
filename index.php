@@ -1,4 +1,6 @@
 <?php
+ini_set('xdebug.max_nesting_level', 15000);
+
 require('src/Test.php');
 require('src/Performance.php');
 require('src/AdventOfCode.php');
