@@ -46,7 +46,10 @@ abstract class Test
     {
         $errors = [];
 
+        $inputNumber = 0;
         foreach ($this->{'part' . $part . 'Tests'} as $input => $expectedOutput) {
+            $inputNumber++;
+
             $input = explode(static::INPUT_DELIMITER, $input);
 
             $actualOutput = $this->{'getPart' . $part}($input, true);
@@ -56,7 +59,7 @@ abstract class Test
                     $input = implode(static::INPUT_DELIMITER, $input);
                 }
 
-                $errors[] = 'Input: ' . $input . ', expected: ' . $expectedOutput . ', received: ' . $actualOutput;
+                $errors[] = 'Input #' . $inputNumber . ' expected: ' . $expectedOutput . ', received: ' . $actualOutput;
             }
         }
 
