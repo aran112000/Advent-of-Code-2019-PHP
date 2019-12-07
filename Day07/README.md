@@ -1,10 +1,13 @@
-# Day 7: [Title]
+# Day 7: Amplification Circuit
 
 ![Advent of Code 2019 PHP solutions](https://raw.githubusercontent.com/aran112000/Advent-of-Code-2019-PHP/master/aoc.png "Advent of Code 2019")
 
 ## Results
 ```console
-Coming soon...
+Running: Day07
+
+Part one: `359142` (Completed in 0.04523s)
+Part two: COMING SOON
 ```
 
 ## Instructions
