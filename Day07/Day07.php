@@ -87,7 +87,7 @@ class Day07 extends AdventOfCode
         }
 
         if (empty($combinations)) {
-            $combinations = array_map(fn ($character) => [$character], $characters);
+            $combinations = array_map(fn($character) => [$character], $characters);
         }
 
         if ($size === 1) {
