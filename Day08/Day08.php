@@ -86,6 +86,6 @@ class Day08 extends AdventOfCode
     {
         $input = trim(file_get_contents($this->getDay() . DIRECTORY_SEPARATOR . 'input.txt'));
 
-        return str_split($input, 25*6);
+        return str_split($input, 25 * 6);
     }
 }
