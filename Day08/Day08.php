@@ -56,7 +56,16 @@ class Day08 extends AdventOfCode
             }
         }
 
-        // Draw a more readable version to the console output
+        return $this->drawImage($finalImage);
+    }
+
+    /**
+     * @param string $finalImage
+     *
+     * @return string
+     */
+    protected function drawImage(string $finalImage): string
+    {
         $image = PHP_EOL;
         foreach (str_split($finalImage, 25) as $value) {
             $image .= strtr($value, [
