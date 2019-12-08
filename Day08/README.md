@@ -1,10 +1,20 @@
-# Day 8: [Title]
+# Day 8: Space Image Format
 
 ![Advent of Code 2019 PHP solutions](https://raw.githubusercontent.com/aran112000/Advent-of-Code-2019-PHP/master/aoc.png "Advent of Code 2019")
 
 ## Results
 ```console
-Coming soon...
+Running: Day08
+
+Part one: `1088` (Completed in 0.23782s)
+Part two: `
+█     ██  █   ██  █ ███
+█    █  █ █   ██  █ █  █
+█    █     █ █ ████ ███
+█    █ ██   █  █  █ █  █
+█    █  █   █  █  █ █  █
+████  ███   █  █  █ ███
+` (Completed in 0.24070s)
 ```
 
 ## Instructions

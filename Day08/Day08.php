@@ -10,9 +10,9 @@ use AdventOfCode\AdventOfCode;
 class Day08 extends AdventOfCode
 {
 
-    protected array $partTwoTests = [
-        // TODO
-    ];
+    protected const PIXEL_BLACK = 0;
+    protected const PIXEL_WHITE = 1;
+    protected const PIXEL_TRANSPARENT = 2;
 
     /**
      * @param int[] $input
@@ -41,12 +41,43 @@ class Day08 extends AdventOfCode
 
     /**
      * @param int[] $input
+     *
+     * @return string
      */
-    public function getPartTwo(array $input)
+    public function getPartTwo(array $input): string
     {
-        // TODO
+        $imageLayers = array_map(fn($imageLayer) => implode('', $imageLayer), $this->decodeImage(25, 6, $input));
+        $finalImage = array_shift($imageLayers);
+
+        while ($pos = strpos($finalImage, (string) self::PIXEL_TRANSPARENT)) {
+            foreach ($imageLayers as $imageLayer) {
+                if ($imageLayer[$pos] != self::PIXEL_TRANSPARENT) {
+                    $finalImage[$pos] = $imageLayer[$pos];
+
+                    break;
+                }
+            }
+        }
+
+        // Draw a more readable version to the console output
+        $image = PHP_EOL;
+        foreach (str_split($finalImage, 25) as $value) {
+            $image .= strtr($value, [
+                '0' => ' ',
+                '1' => '█',
+            ]) . PHP_EOL;
+        }
+
+        return $image;
     }
 
+    /**
+     * @param int   $width
+     * @param int   $height
+     * @param array $rawImageData
+     *
+     * @return array
+     */
     protected function decodeImage(int $width, int $height, array $rawImageData): array
     {
         $imageLayers = [];
