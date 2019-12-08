@@ -32,7 +32,6 @@ class IntcodeComputer
     ];
 
     private const PARAMETER_MODE_POSITION = 0;
-
     /**
      * @var int[]
      */
@@ -41,7 +40,7 @@ class IntcodeComputer
     /**
      * IntcodeComputer constructor.
      *
-     * @param int[] $instructions
+     * @param int[]         $instructions
      */
     public function __construct(array $instructions)
     {
@@ -49,16 +48,21 @@ class IntcodeComputer
     }
 
     /**
-     * @param int[] $inputs
+     * @param int[]    $inputs
+     * @param callable $finishedCallback
      *
      * @return int
      */
-    public function calculate(int ...$inputs): int
+    public function calculate(array $inputs, $finishedCallback = null): int
     {
         for ($i = 0, $count = count($this->instructions); $i < $count; $i += 0) {
             $opcode = (int) substr($this->instructions[$i], -2);
 
             if ($opcode === static::OPCODE_FINISHED) {
+                if ($finishedCallback) {
+                    $finishedCallback($opcode);
+                }
+
                 break;
             }
 
@@ -82,7 +86,12 @@ class IntcodeComputer
             }
 
             if ($opcode === static::OPCODE_INPUT) {
-                $this->setValue($instruction, array_shift($inputs));
+                $value = array_shift($inputs);
+                if ($value === null) {
+                    die('No input parameter to supply');
+                }
+
+                $this->setValue($instruction, $value);
 
                 continue;
             }
