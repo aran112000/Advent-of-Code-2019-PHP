@@ -15,7 +15,7 @@ class Day08 extends AdventOfCode
     protected const PIXEL_TRANSPARENT = '2';
 
     /**
-     * @param int[] $imageLayers
+     * @param int[][] $imageLayers
      *
      * @return int
      */
@@ -37,13 +37,14 @@ class Day08 extends AdventOfCode
     }
 
     /**
-     * @param int[] $imageLayers
+     * @param int[][] $imageLayers
      *
      * @return string
      */
     public function getPartTwo(array $imageLayers): string
     {
         $finalImage = $imageLayers[0];
+        unset($imageLayers[0]); // Don't loop this first row again
 
         while ($pos = strpos($finalImage, static::PIXEL_TRANSPARENT)) {
             foreach ($imageLayers as $imageLayer) {
