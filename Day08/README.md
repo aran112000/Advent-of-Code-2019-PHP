@@ -6,7 +6,7 @@
 ```console
 Running: Day08
 
-Part one: `1088` (Completed in 0.23782s)
+Part one: `1088` (Completed in 0.00012s)
 Part two: `
 █     ██  █   ██  █ ███
 █    █  █ █   ██  █ █  █
@@ -14,7 +14,7 @@ Part two: `
 █    █ ██   █  █  █ █  █
 █    █  █   █  █  █ █  █
 ████  ███   █  █  █ ███
-` (Completed in 0.24070s)
+` (Completed in 0.00118s)
 ```
 
 ## Instructions

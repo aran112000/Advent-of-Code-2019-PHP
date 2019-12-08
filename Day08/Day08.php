@@ -10,48 +10,44 @@ use AdventOfCode\AdventOfCode;
 class Day08 extends AdventOfCode
 {
 
-    protected const PIXEL_BLACK = 0;
-    protected const PIXEL_WHITE = 1;
-    protected const PIXEL_TRANSPARENT = 2;
+    protected const PIXEL_BLACK = '0';
+    protected const PIXEL_WHITE = '1';
+    protected const PIXEL_TRANSPARENT = '2';
 
     /**
-     * @param int[] $input
+     * @param int[] $imageLayers
      *
      * @return int
      */
-    public function getPartOne(array $input): int
+    public function getPartOne(array $imageLayers): int
     {
         $lowestZeroCount = null;
         $lowestZeroCountLayer = null;
 
-        $imageLayers = $this->decodeImage(25, 6, $input);
-        foreach ($imageLayers as $i => $imageLayer) {
-            $stringedImageLayer = implode('', $imageLayer);
-
-            $zeroCount = substr_count($stringedImageLayer, '0');
+        foreach ($imageLayers as $imageLayer) {
+            $zeroCount = substr_count($imageLayer, static::PIXEL_BLACK);
 
             if ($lowestZeroCount === null || $zeroCount < $lowestZeroCount) {
                 $lowestZeroCount = $zeroCount;
-                $lowestZeroCountLayer = $stringedImageLayer;
+                $lowestZeroCountLayer = $imageLayer;
             }
         }
 
-        return substr_count($lowestZeroCountLayer, '1') * substr_count($lowestZeroCountLayer, '2');
+        return substr_count($lowestZeroCountLayer, static::PIXEL_WHITE) * substr_count($lowestZeroCountLayer, static::PIXEL_TRANSPARENT);
     }
 
     /**
-     * @param int[] $input
+     * @param int[] $imageLayers
      *
      * @return string
      */
-    public function getPartTwo(array $input): string
+    public function getPartTwo(array $imageLayers): string
     {
-        $imageLayers = array_map(fn($imageLayer) => implode('', $imageLayer), $this->decodeImage(25, 6, $input));
-        $finalImage = array_shift($imageLayers);
+        $finalImage = $imageLayers[0];
 
-        while ($pos = strpos($finalImage, (string) self::PIXEL_TRANSPARENT)) {
+        while ($pos = strpos($finalImage, static::PIXEL_TRANSPARENT)) {
             foreach ($imageLayers as $imageLayer) {
-                if ($imageLayer[$pos] != self::PIXEL_TRANSPARENT) {
+                if ($imageLayer[$pos] !== static::PIXEL_TRANSPARENT) {
                     $finalImage[$pos] = $imageLayer[$pos];
 
                     break;
@@ -72,33 +68,6 @@ class Day08 extends AdventOfCode
     }
 
     /**
-     * @param int   $width
-     * @param int   $height
-     * @param array $rawImageData
-     *
-     * @return array
-     */
-    protected function decodeImage(int $width, int $height, array $rawImageData): array
-    {
-        $imageLayers = [];
-
-        while ($rawImageData) {
-            $image = [];
-            for ($h = 0; $h < $height; $h++) {
-                $row = [];
-                for ($w = 0; $w < $width; $w++) {
-                    $row[] = array_shift($rawImageData);
-                }
-                $image[$h] = implode('', $row);
-            }
-
-            $imageLayers[] = $image;
-        }
-
-        return $imageLayers;
-    }
-
-    /**
      * @param string $delimiter
      *
      * @return array
@@ -107,6 +76,6 @@ class Day08 extends AdventOfCode
     {
         $input = trim(file_get_contents($this->getDay() . DIRECTORY_SEPARATOR . 'input.txt'));
 
-        return str_split($input, 1);
+        return str_split($input, 25*6);
     }
 }
