@@ -47,7 +47,7 @@ abstract class AdventOfCode extends Test
      *
      * @return array
      */
-    private function getInput($delimiter = "\n"): array
+    protected function getInput($delimiter = "\n"): array
     {
         return explode($delimiter, trim(file_get_contents($this->getDay() . DIRECTORY_SEPARATOR . 'input.txt')));
     }
