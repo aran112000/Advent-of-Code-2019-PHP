@@ -55,10 +55,6 @@ abstract class Test
             $actualOutput = $this->{'getPart' . $part}($input, true);
 
             if ($expectedOutput != $actualOutput) {
-                if (is_array($input)) {
-                    $input = implode(static::INPUT_DELIMITER, $input);
-                }
-
                 $errors[] = 'Input #' . $inputNumber . ' expected: ' . $expectedOutput . ', received: ' . $actualOutput;
             }
         }
