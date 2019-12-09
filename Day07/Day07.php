@@ -50,31 +50,30 @@ class Day07 extends AdventOfCode
      */
     public function getPartTwo(array $input): int
     {
-        $loop = 0;
-        $running = true;
         $thrusterOutputs = [];
-        while ($running) {
-            $loop++;
-            foreach ($this->getAllNonRepeatingCombinations(range(5, 9)) as $possibleInputs) {
-                $intcodeComputers = [];
-                $output = 0;
-                foreach ($possibleInputs as $c => $possibleInput) {
-                    if (!isset($intcodeComputers[$c])) {
-                        $intcodeComputers[$c] = new IntcodeComputer($input);
-                    }
+        foreach ($this->getAllNonRepeatingCombinations(range(5, 9)) as $inputNumber => $possibleInputs) {
+            $i = 0;
+            $output = 0;
 
-                    $parameters = [$output];
-                    if ($loop === 1) {
-                        $parameters = [$possibleInput, $output];
-                    }
+            /** @var IntcodeComputer[] $intcodeComputers */
+            $intcodeComputers = [];
 
-                    $output = $intcodeComputers[$c]->calculate($parameters, function () use (&$running) {
-                        $running = false;
-                    });
+            while (!$this->haveAllCompleted($intcodeComputers)) {
+                $i++;
+                $loop = intdiv($i, 5);
+
+                $computer = $i % 5;
+                $intcodeComputers[$computer] ??= new IntcodeComputer($input);
+
+                $parameters = [$output];
+                if ($loop === 0) {
+                    $parameters = [$possibleInputs[$computer], $output];
                 }
 
-                $thrusterOutputs[] = $output;
+                $output = $intcodeComputers[$computer]->calculate($parameters);
             }
+
+            $thrusterOutputs[] = $output;
         }
 
         return max($thrusterOutputs);
@@ -106,5 +105,25 @@ class Day07 extends AdventOfCode
         }
 
         return $this->getAllNonRepeatingCombinations($characters, $size - 1, $new_combinations);
+    }
+
+    /**
+     * @param IntcodeComputer[]|array $intcodeComputers
+     *
+     * @return bool
+     */
+    protected function haveAllCompleted(array $intcodeComputers): bool
+    {
+        if (!$intcodeComputers) {
+            return false;
+        }
+
+        foreach ($intcodeComputers as $computer) {
+            if (!$computer->completed()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

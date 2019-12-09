@@ -6,7 +6,7 @@ require('src/Performance.php');
 require('src/AdventOfCode.php');
 require('src/Autoloader.php');
 
-$day = null; // Set to an integer to force a given day
+$day = 7; // Set to an integer to force a given day
 
 if ($day === null) {
     $day = date('d');

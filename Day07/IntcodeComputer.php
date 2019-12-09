@@ -36,6 +36,18 @@ class IntcodeComputer
      * @var int[]
      */
     private array $instructions;
+    /**
+     * @var int
+     */
+    private int $progress = 0;
+    /**
+     * @var int
+     */
+    private int $lastOutput = 0;
+    /**
+     * @var bool
+     */
+    private bool $completed = false;
 
     /**
      * IntcodeComputer constructor.
@@ -51,14 +63,16 @@ class IntcodeComputer
      * @param int[]    $inputs
      * @param callable $finishedCallback
      *
-     * @return int
+     * @return int|null
      */
-    public function calculate(array $inputs, $finishedCallback = null): int
+    public function calculate(array $inputs, $finishedCallback = null): ?int
     {
-        for ($i = 0, $count = count($this->instructions); $i < $count; $i += 0) {
-            $opcode = (int) substr($this->instructions[$i], -2);
+        for ($count = count($this->instructions); $this->progress < $count; $this->progress += 0) {
+            $opcode = (int) substr($this->instructions[$this->progress], -2);
 
             if ($opcode === static::OPCODE_FINISHED) {
+                $this->completed = true;
+
                 if ($finishedCallback) {
                     $finishedCallback($opcode);
                 }
@@ -68,10 +82,10 @@ class IntcodeComputer
 
             $instruction = [];
             for ($ii = 0; $ii < static::OPCODE_PARAMETER_COUNT[$opcode]; $ii++) {
-                $instruction[] = $this->instructions[$i + $ii];
+                $instruction[] = $this->instructions[$this->progress + $ii];
             }
 
-            $i += static::OPCODE_PARAMETER_COUNT[$opcode];
+            $this->progress += static::OPCODE_PARAMETER_COUNT[$opcode];
 
             if ($opcode === static::OPCODE_ADD) {
                 $this->setValue($instruction, $this->getValue($instruction, 1) + $this->getValue($instruction, 2));
@@ -88,7 +102,10 @@ class IntcodeComputer
             if ($opcode === static::OPCODE_INPUT) {
                 $value = array_shift($inputs);
                 if ($value === null) {
-                    die('No input parameter to supply');
+                    // Pause;
+                    $this->progress -= static::OPCODE_PARAMETER_COUNT[$opcode]; // Rewind so we can replay this with a new input shortly
+
+                    return $this->getLastOutput();
                 }
 
                 $this->setValue($instruction, $value);
@@ -98,7 +115,9 @@ class IntcodeComputer
 
             if ($opcode === static::OPCODE_OUTPUT) {
                 if ($this->getValue($instruction, 1)) {
-                    return $this->getValue($instruction, 1);
+                    $this->lastOutput = $this->getValue($instruction, 1);
+
+                    return $this->lastOutput;
                 }
 
                 continue;
@@ -106,7 +125,7 @@ class IntcodeComputer
 
             if ($opcode === static::OPCODE_JUMP_IF_TRUE) {
                 if ($value = $this->getValue($instruction, 1)) {
-                    $i = $this->getValue($instruction, 2);
+                    $this->progress = $this->getValue($instruction, 2);
                 }
 
                 continue;
@@ -114,7 +133,7 @@ class IntcodeComputer
 
             if ($opcode === static::OPCODE_JUMP_IF_FALSE) {
                 if (!$this->getValue($instruction, 1)) {
-                    $i = $this->getValue($instruction, 2);
+                    $this->progress = $this->getValue($instruction, 2);
                 }
 
                 continue;
@@ -141,7 +160,7 @@ class IntcodeComputer
             }
         }
 
-        return $this->instructions[0];
+        return $this->getLastOutput();
     }
 
     /**
@@ -189,5 +208,21 @@ class IntcodeComputer
         }
 
         return 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function completed(): bool
+    {
+        return $this->completed;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLastOutput(): int
+    {
+        return $this->lastOutput;
     }
 }
