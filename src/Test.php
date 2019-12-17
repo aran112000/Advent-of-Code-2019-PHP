@@ -52,10 +52,14 @@ abstract class Test
 
             $input = explode(static::INPUT_DELIMITER, $input);
 
-            $actualOutput = $this->{'getPart' . $part}($input, true);
+            $suggestedOutput = $this->{'getPart' . $part}($input, true);
 
-            if ($expectedOutput != $actualOutput) {
-                $errors[] = 'Input #' . $inputNumber . ' expected: ' . $expectedOutput . ', received: ' . $actualOutput;
+            if (is_callable($expectedOutput)) {
+                $expectedOutput = $expectedOutput($suggestedOutput);
+            }
+
+            if ($expectedOutput != $suggestedOutput) {
+                $errors[] = 'Input #' . $inputNumber . ' expected: ' . $expectedOutput . ', received: ' . (empty($suggestedOutput) ? 'null' : $suggestedOutput);
             }
         }
 
