@@ -10,13 +10,21 @@ use AdventOfCode\AdventOfCode;
 class Day09 extends AdventOfCode
 {
 
-    protected array $partOneTests = [
-        // TODO
-    ];
+    public function __construct()
+    {
+        $this->partOneTests = [
+            '109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99' => '109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99',
+            '1102,34915192,34915192,7,4,7,99,0' => function ($suggested_answer) {
+                // Should output a 16-digit number
+                return (is_numeric($suggested_answer) && strlen($suggested_answer) === 16 ? $suggested_answer : 'A 16-digit number');
+            },
+            '104,1125899906842624,99' => '1125899906842624',
+        ];
 
-    protected array $partTwoTests = [
-        // TODO
-    ];
+        $this->partTwoTests = [
+            // TODO
+        ];
+    }
 
     /**
      * @param int[] $input
