@@ -1,6 +1,6 @@
 <?php
 
-namespace AdventOfCode\Day07;
+namespace AdventOfCode\Day09;
 
 /**
  * Class IntcodeComputer
@@ -18,6 +18,7 @@ class IntcodeComputer
     private const OPCODE_JUMP_IF_FALSE = 6;
     private const OPCODE_LESS_THAN = 7;
     private const OPCODE_EQUALS = 8;
+    private const OPCODE_INCREMENT_RELATIVE_BASE = 9;
     private const OPCODE_FINISHED = 99;
 
     private const OPCODE_PARAMETER_COUNT = [
@@ -29,9 +30,13 @@ class IntcodeComputer
         self::OPCODE_JUMP_IF_FALSE => 3,
         self::OPCODE_LESS_THAN => 4,
         self::OPCODE_EQUALS => 4,
+        self::OPCODE_INCREMENT_RELATIVE_BASE => 2,
     ];
 
     private const PARAMETER_MODE_POSITION = 0;
+    private const PARAMETER_MODE_IMMEDIATE = 1;
+    private const PARAMETER_MODE_RELATIVE = 2;
+
     /**
      * @var int[]
      */
@@ -43,11 +48,15 @@ class IntcodeComputer
     /**
      * @var int
      */
-    private int $lastOutput = 0;
+    private int $relativeBase = 0;
     /**
      * @var bool
      */
     private bool $completed = false;
+    /**
+     * @var int[]
+     */
+    private array $outputs = [];
 
     /**
      * IntcodeComputer constructor.
@@ -64,7 +73,7 @@ class IntcodeComputer
      *
      * @return int|null
      */
-    public function calculate(array $inputs): ?int
+    public function calculate(array $inputs = []): ?int
     {
         for ($count = count($this->instructions); $this->progress < $count; $this->progress += 0) {
             $opcode = (int) substr($this->instructions[$this->progress], -2);
@@ -72,7 +81,7 @@ class IntcodeComputer
             if ($opcode === static::OPCODE_FINISHED) {
                 $this->completed = true;
 
-                break;
+                return $this->getLastOutput();
             }
 
             $instruction = [];
@@ -83,13 +92,13 @@ class IntcodeComputer
             $this->progress += static::OPCODE_PARAMETER_COUNT[$opcode];
 
             if ($opcode === static::OPCODE_ADD) {
-                $this->setValue($instruction, $this->getValue($instruction, 1) + $this->getValue($instruction, 2));
+                $this->setValue($instruction, $this->getValue($instruction) + $this->getValue($instruction, 2));
 
                 continue;
             }
 
             if ($opcode === static::OPCODE_MULTIPLY) {
-                $this->setValue($instruction, $this->getValue($instruction, 1) * $this->getValue($instruction, 2));
+                $this->setValue($instruction, $this->getValue($instruction) * $this->getValue($instruction, 2));
 
                 continue;
             }
@@ -97,7 +106,6 @@ class IntcodeComputer
             if ($opcode === static::OPCODE_INPUT) {
                 $value = array_shift($inputs);
                 if ($value === null) {
-                    // Pause;
                     $this->progress -= static::OPCODE_PARAMETER_COUNT[$opcode]; // Rewind so we can replay this with a new input shortly
 
                     return null;
@@ -109,17 +117,15 @@ class IntcodeComputer
             }
 
             if ($opcode === static::OPCODE_OUTPUT) {
-                if ($this->getValue($instruction, 1)) {
-                    $this->lastOutput = $this->getValue($instruction, 1);
-
-                    return $this->lastOutput;
+                if ($this->getValue($instruction)) {
+                    $this->outputs[] = $this->getValue($instruction);
                 }
 
                 continue;
             }
 
             if ($opcode === static::OPCODE_JUMP_IF_TRUE) {
-                if ($value = $this->getValue($instruction, 1)) {
+                if ($value = $this->getValue($instruction)) {
                     $this->progress = $this->getValue($instruction, 2);
                 }
 
@@ -127,7 +133,7 @@ class IntcodeComputer
             }
 
             if ($opcode === static::OPCODE_JUMP_IF_FALSE) {
-                if (!$this->getValue($instruction, 1)) {
+                if (!$this->getValue($instruction)) {
                     $this->progress = $this->getValue($instruction, 2);
                 }
 
@@ -135,7 +141,7 @@ class IntcodeComputer
             }
 
             if ($opcode === static::OPCODE_LESS_THAN) {
-                if ($this->getValue($instruction, 1) < $this->getValue($instruction, 2)) {
+                if ($this->getValue($instruction) < $this->getValue($instruction, 2)) {
                     $this->setValue($instruction, 1);
                 } else {
                     $this->setValue($instruction, 0);
@@ -145,11 +151,17 @@ class IntcodeComputer
             }
 
             if ($opcode === static::OPCODE_EQUALS) {
-                if ($this->getValue($instruction, 1) === $this->getValue($instruction, 2)) {
+                if ($this->getValue($instruction) === $this->getValue($instruction, 2)) {
                     $this->setValue($instruction, 1);
                 } else {
                     $this->setValue($instruction, 0);
                 }
+
+                continue;
+            }
+
+            if ($opcode === static::OPCODE_INCREMENT_RELATIVE_BASE) {
+                $this->relativeBase += $this->getValue($instruction);
 
                 continue;
             }
@@ -160,17 +172,38 @@ class IntcodeComputer
 
     /**
      * @param int[] $instruction
-     * @param int   $valueNumber
+     * @param int   $parameterNumber
      *
      * @return int
      */
-    protected function getValue(array $instruction, int $valueNumber): int
+    protected function getValue(array $instruction, int $parameterNumber = 1): int
     {
-        if ($this->getModes($valueNumber, $instruction) === static::PARAMETER_MODE_POSITION) {
-            return $this->instructions[$instruction[$valueNumber]];
+        $mode = $this->getMode($parameterNumber, $instruction);
+
+        if ($mode === static::PARAMETER_MODE_POSITION) {
+            return $this->instructions[$instruction[$parameterNumber]] ?? 0;
         }
 
-        return $instruction[$valueNumber];
+        if ($mode === static::PARAMETER_MODE_IMMEDIATE) {
+            return $instruction[$parameterNumber];
+        }
+
+        if ($mode === static::PARAMETER_MODE_RELATIVE) {
+            // Parameters in mode 2, relative mode, behave very similarly to parameters in position mode:
+            // the parameter is interpreted as a position. Like position mode, parameters in relative mode
+            // can be read from or written to.
+
+            // The important difference is that relative mode parameters don't count from address 0.
+            // Instead, they count from a value called the relative base. The relative base starts at 0.
+
+            // The address a relative mode parameter refers to is itself plus the current relative base.
+            // When the relative base is 0, relative mode parameters and position mode parameters with the
+            // same value refer to the same address.
+
+            $address = $this->relativeBase + $instruction[$parameterNumber];
+
+            return $this->instructions[$address];
+        }
     }
 
     /**
@@ -194,12 +227,16 @@ class IntcodeComputer
      *
      * @return int
      */
-    protected function getModes(int $valueNumber, array $instruction): int
+    protected function getMode(int $valueNumber, array $instruction): int
     {
         $instruction = $instruction[0] / 100;
 
-        if ($valueNumber == 1 && $instruction % 10 > 0 || $valueNumber == 2 && ($instruction / 10) % 10 > 0) {
-            return 1;
+        if ($valueNumber == 1 && $instruction % 10 > 0) {
+            return $instruction % 10;
+        }
+
+        if ($valueNumber == 2 && ($instruction / 10) % 10 > 0) {
+            return ($instruction / 10) % 10;
         }
 
         return 0;
@@ -218,6 +255,14 @@ class IntcodeComputer
      */
     public function getLastOutput(): int
     {
-        return $this->lastOutput;
+        return end($this->outputs);
+    }
+
+    /**
+     * @return array
+     */
+    public function getOutputs(): array
+    {
+        return $this->outputs;
     }
 }

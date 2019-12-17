@@ -198,8 +198,12 @@ class IntcodeComputer
     {
         $instruction = $instruction[0] / 100;
 
-        if ($valueNumber == 1 && $instruction % 10 > 0 || $valueNumber == 2 && ($instruction / 10) % 10 > 0) {
-            return 1;
+        if ($valueNumber == 1 && $instruction % 10 > 0) {
+            return $instruction % 10;
+        }
+
+        if ($valueNumber == 2 && ($instruction / 10) % 10 > 0) {
+            return ($instruction / 10) % 10;
         }
 
         return 0;
