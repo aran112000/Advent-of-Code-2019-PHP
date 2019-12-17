@@ -6,8 +6,12 @@
 ```console
 Running: Day07
 
-Part one: `359142` (Completed in 0.04523s)
-Part two: COMING SOON
+Running tests...
+Part one test results: Passed 3/3 tests
+Part two test results: Passed 2/2 tests
+
+Part one: `359142` (Completed in 0.04402s)
+Part two: `4374895` (Completed in 0.19465s)
 ```
 
 ## Instructions
