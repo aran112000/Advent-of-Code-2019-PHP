@@ -51,18 +51,17 @@ class Day07 extends AdventOfCode
     public function getPartTwo(array $input): int
     {
         $thrusterOutputs = [];
-        foreach ($this->getAllNonRepeatingCombinations(range(5, 9)) as $inputNumber => $possibleInputs) {
+        foreach ($this->getAllNonRepeatingCombinations(range(5, 9)) as $possibleInputs) {
             $i = 0;
             $output = 0;
 
             /** @var IntcodeComputer[] $intcodeComputers */
             $intcodeComputers = [];
 
-            while (!$this->haveAllCompleted($intcodeComputers)) {
-                $i++;
+            while (true) {
                 $loop = intdiv($i, 5);
-
                 $computer = $i % 5;
+
                 $intcodeComputers[$computer] ??= new IntcodeComputer($input);
 
                 $parameters = [$output];
@@ -70,15 +69,31 @@ class Day07 extends AdventOfCode
                     $parameters = [$possibleInputs[$computer], $output];
                 }
 
-                $output = $intcodeComputers[$computer]->calculate($parameters);
-            }
+                $last_output = $intcodeComputers[$computer]->calculate($parameters);
+                if ($last_output !== null) {
+                    $output = $last_output;
+                }
 
-            $thrusterOutputs[] = $output;
+                if ($intcodeComputers[$computer]->completed()) {
+                    $thrusterOutputs[] = $output;
+
+                    break;
+                }
+
+                $i++;
+            }
         }
 
         return max($thrusterOutputs);
     }
 
+    /**
+     * @param array    $characters
+     * @param int|null $size
+     * @param array    $combinations
+     *
+     * @return array
+     */
     protected function getAllNonRepeatingCombinations(array $characters, int $size = null, array $combinations = []): array
     {
         if ($size === null) {
@@ -105,25 +120,5 @@ class Day07 extends AdventOfCode
         }
 
         return $this->getAllNonRepeatingCombinations($characters, $size - 1, $new_combinations);
-    }
-
-    /**
-     * @param IntcodeComputer[]|array $intcodeComputers
-     *
-     * @return bool
-     */
-    protected function haveAllCompleted(array $intcodeComputers): bool
-    {
-        if (!$intcodeComputers) {
-            return false;
-        }
-
-        foreach ($intcodeComputers as $computer) {
-            if (!$computer->completed()) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

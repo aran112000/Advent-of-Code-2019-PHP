@@ -61,21 +61,16 @@ class IntcodeComputer
 
     /**
      * @param int[]    $inputs
-     * @param callable $finishedCallback
      *
      * @return int|null
      */
-    public function calculate(array $inputs, $finishedCallback = null): ?int
+    public function calculate(array $inputs): ?int
     {
         for ($count = count($this->instructions); $this->progress < $count; $this->progress += 0) {
             $opcode = (int) substr($this->instructions[$this->progress], -2);
 
             if ($opcode === static::OPCODE_FINISHED) {
                 $this->completed = true;
-
-                if ($finishedCallback) {
-                    $finishedCallback($opcode);
-                }
 
                 break;
             }
@@ -105,7 +100,7 @@ class IntcodeComputer
                     // Pause;
                     $this->progress -= static::OPCODE_PARAMETER_COUNT[$opcode]; // Rewind so we can replay this with a new input shortly
 
-                    return $this->getLastOutput();
+                    return null;
                 }
 
                 $this->setValue($instruction, $value);
@@ -160,7 +155,7 @@ class IntcodeComputer
             }
         }
 
-        return $this->getLastOutput();
+        return null;
     }
 
     /**
